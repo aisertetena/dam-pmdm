@@ -24,6 +24,7 @@ body {
 
 a {
   color: $color-acento;
+  &:visited { color: darken($color-acento, 20%); }
   &:hover { color: darken($color-acento, 10%); }
 }
 
@@ -75,5 +76,6 @@ pre, code {
   text-decoration: none;
   display: inline-block;
 
+  &:visited { color: $color-acento-bg; }
   &:hover { background-color: darken($color-acento, 8%); }
 }
