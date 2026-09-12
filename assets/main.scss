@@ -13,8 +13,15 @@ $color-texto:         #2C2C2A; // gris oscuro - cuerpo de texto
 $color-texto-secundario: #5F5E5A;
 $color-aviso:         #BA7517; // ámbar - avisos y ejercicios
 $color-aviso-bg:      #FAEEDA;
-$color-codigo-bg:     #0C3D2E; // fondo bloques de código
-$color-codigo-texto:  #9FE1CB;
+$color-codigo-bg:     #15332B; // fondo bloques de código (verde más apagado)
+$color-codigo-texto:  #D8ECE3; // texto base, menta suave
+
+// Tokens de resaltado de sintaxis (Rouge), derivados del acento y el aviso
+// para que el código siga la misma armonía violeta / verde / ámbar.
+$color-codigo-clave:      #BFAEFA; // palabras clave — familia violeta ($color-acento)
+$color-codigo-cadena:     #F3C77E; // cadenas y números — familia ámbar ($color-aviso)
+$color-codigo-nombre:     #EAF7F1; // funciones, clases, etiquetas — casi blanco menta
+$color-codigo-comentario: #7FA89A; // comentarios — verde-gris apagado
 
 // ===== Base =====
 body {
@@ -34,8 +41,42 @@ a {
   color: $color-primario-bg !important;
 }
 
+// El título y el icono hamburguesa flotan los dos a la izquierda en móvil;
+// sin este hueco el icono (que pasa a ser position:absolute) queda encima
+// del texto del título.
+.site-title {
+  @include media-query($on-palm) {
+    padding-left: 56px;
+  }
+}
+
 .site-nav .page-link {
   color: $color-primario-bg;
+}
+
+// En pantallas pequeñas minima convierte el menú en un desplegable con SU
+// PROPIO fondo claro por defecto (#fdfdfd) — ahí el .page-link claro de
+// arriba (pensado para la cabecera teal) quedaba casi invisible. Le damos
+// al desplegable el mismo fondo teal que la cabecera y lo movemos, junto
+// con el icono hamburguesa, a la izquierda.
+.site-nav {
+  @include media-query($on-palm) {
+    left: $spacing-unit / 2;
+    right: auto;
+    text-align: left;
+    background-color: $color-primario;
+    border-color: $color-primario;
+
+    label[for="nav-trigger"] { float: left; }
+
+    .menu-icon {
+      float: left;
+
+      > svg { fill: $color-primario-bg; }
+    }
+    // .page-link ya hereda el color claro de la regla de arriba; con este
+    // fondo teal pasa a leerse bien.
+  }
 }
 
 h1, h2, h3 {
@@ -47,6 +88,25 @@ pre, code {
   background-color: $color-codigo-bg;
   color: $color-codigo-texto;
   border-radius: 8px;
+}
+
+// Rouge (el resaltador de sintaxis) pinta sus propios <span> por encima de
+// pre/code con colores pensados para fondo claro, así que hay que igualar
+// también el fondo de `.highlight` y recolorear sus tokens.
+.highlight {
+  background-color: $color-codigo-bg;
+
+  .c, .c1, .cm, .cp, .cs { color: $color-codigo-comentario; font-style: italic; } // comentarios
+  .err                    { color: $color-aviso; background: none; } // errores
+
+  .k, .kc, .kd, .kn, .kp, .kr, .kt, .ow, .nb, .bp { color: $color-codigo-clave; font-weight: 600; } // palabras clave / builtins
+
+  .s, .s1, .s2, .sb, .sc, .sd, .se, .sh, .si, .sr, .sx, .ss,
+  .m, .mf, .mh, .mi, .mo, .il { color: $color-codigo-cadena; } // cadenas y números
+
+  .nf, .nc, .nn, .nx, .na, .nt { color: $color-codigo-nombre; } // funciones, clases, etiquetas
+
+  .o { color: $color-codigo-texto; } // operadores
 }
 
 // ===== Bloques de aviso / ejercicio =====
